@@ -1,0 +1,88 @@
+"use strict";
+
+const assert = require('chai').assert;
+var dgram = require('dgram');
+
+const NibeHandler = require('../lib/nibe/nibehandler.js').NibeHandler;
+
+describe("nibe/handler", () => {
+    it("shall exist", () => {     
+        assert.isOk(NibeHandler);
+    });
+
+    it("should emit variable update events from a MODBUS_DATA_READ_OUT_MSG", function(done) {
+        this.timeout(1000);
+        
+        const data = Buffer.from("5C00206850549C0901579CF101589CF0014C9C4C0122B82800C9AF0000449CCC00489CEE00599CF6005A9CFA004E9CF6014D9C0102619C0080ABA90000FAA904001C9DC80001A80E014CA80000569C0080FFFF000020", "hex");
+
+        let nibe = new NibeHandler();
+        nibe.on('modbusUpdate', (modbusUpdate) => {
+            if (modbusUpdate.coilAddress == 40220 &&
+                modbusUpdate.value == 200) {
+                    done();
+            }
+        })
+
+        nibe.handleMessage(data);
+    });
+
+    it("should emit variable update events from a CMD_MODBUS_READ_RESP", function(done) {
+        this.timeout(1000);
+        
+        const data = Buffer.from("5C00206A060102030405064B", "hex");
+
+        let nibe = new NibeHandler();
+        nibe.on('modbusUpdate', (modbusUpdate) => {
+            if (modbusUpdate.coilAddress == 513 &&
+                modbusUpdate.value == 100992003) {
+                    done();
+            }
+        })
+
+        nibe.handleMessage(data);
+    });
+
+    it("should just drop invalid messages", function() {
+        let nibe = new NibeHandler();
+
+        // This has invalid CRC
+        nibe.handleMessage(Buffer.from("5C00206A060102030405064C", "hex"));
+    });
+
+    it("can listen for udp messages", async function() {
+        let nibe = new NibeHandler();
+
+        const p = new Promise((resolve, reject) => {
+            nibe.on('modbusUpdate', (modbusUpdate) => {
+                console.log("Got modbusUpdate", modbusUpdate);
+                if (modbusUpdate.coilAddress == 513 &&
+                    modbusUpdate.value == 100992003) {
+                        console.log("resolving promise");
+                        nibe.close();
+                        resolve();
+
+                }
+            });
+
+            setTimeout(() => {
+                reject("Timeout while waiting for update");
+            }, 500);
+        });
+
+        let client = null;
+        return nibe.listen()
+            .then(port => {
+                console.log("Listening on port", port);
+                client = dgram.createSocket('udp4');
+                const data = Buffer.from("5C00206A060102030405064B", "hex");
+                client.send(data, 0, data.length, port, '127.0.0.1');
+            })
+            .then(() => {
+                return p;
+            })
+            .then(() => {
+                client.close();       
+            });
+    });
+
+});

@@ -1,0 +1,23 @@
+{
+    "513"   : { "factor": 10,  "type": "sensor",  "name": "Test signal 513", "datatype": "S32"},
+    "40004" : { "factor": 10,  "type": "sensor",  "name": "BT1 Outdoor Temperature", "datatype": "S16"},
+    "40008" : { "factor": 10,  "type": "sensor",  "name": "BT2 Supply Temp S1", "datatype": "S16"},
+    "40012" : { "factor": 10,  "type": "sensor",  "name": "BT3 Return Temp", "datatype": "S16"},
+    "40013" : { "factor": 10,  "type": "sensor",  "name": "BT7 Hot Water Top", "datatype": "S16"},
+    "40014" : { "factor": 10,  "type": "sensor",  "name": "BT6 Hot Water Load", "datatype": "S16"},
+    "40020" : { "factor": 10,  "type": "sensor",  "name": "BT16 Evaporator Temp", "datatype": "S16"},
+    "40022" : { "factor": 10,  "type": "sensor",  "name": "EB100-EP14-BT17 Suction", "datatype": "S16"},
+    "40023" : { "factor": 10,  "type": "sensor",  "name": "Compressor Temp", "datatype": "S16"},
+    "40024" : { "factor": 10,  "type": "sensor",  "name": "BT19 Additional Temp", "datatype": "S16"},
+    "40025" : { "factor": 10,  "type": "sensor",  "name": "BT20 Exhaust air temp. 1", "datatype": "S16"},
+    "40026" : { "factor": 10,  "type": "sensor",  "name": "BT21 Vented air temp. 1", "datatype": "S16"},
+    "40033" : { "factor": 10,  "type": "sensor",  "name": "BT50 Room Temp S1", "datatype": "S16"},
+    "40220" : { "factor": 10,  "type": "sensor",  "name": "Calculated Supply S5", "datatype": "S16"},
+    "43009" : { "factor": 10,  "type": "sensor",  "name": "Calc. Supply S1", "datatype": "S16"},
+    "43084" : { "factor": 100, "type": "sensor",  "name": "Int. el.add. Power", "datatype": "S16"},
+    "43435" : { "factor": 10,  "type": "sensor",  "name": "Compressor State", "datatype": "U8"},
+    "43514" : { "factor": 1,   "type": "sensor",  "name": "EB100-EP14 PCA Base Relays", "datatype": "U8"},
+    "45001" : { "factor": 1,   "type": "sensor",  "name": "Alarm", "datatype": "U8"},
+    "47138" : { "factor": 1,   "type": "setting", "name": "Operational mode heat medium pump", "datatype": "U8"}
+}
+
