@@ -15,4 +15,11 @@ describe("nibe/protocol", () => {
         assert.isOk(res);
     });
 
+    it("can convert value to correct state", () => {
+
+        let _40020 = { "factor": 10,  "type": "sensor",  "name": "BT16 Evaporator Temp", "datatype": "S16"};4
+
+        assert.equal(Protocol.scaleNibeValue(_40020, "235"), 23.5);
+    });
+
 });

@@ -49,6 +49,32 @@ describe("nibe/handler", () => {
         nibe.handleMessage(Buffer.from("5C00206A060102030405064C", "hex"));
     });
 
+    it("will know which variables needs to be refreshed", () => {
+        let nibe = new NibeHandler();
+
+        nibe.variableInfo = {
+            "513" : {
+                "factor": 10,
+                "type": "sensor",
+                "name": "Test signal 513",
+                "datatype": "S32",
+                "refresh": 30
+            }
+        }
+                    
+        let refreshable = nibe.getRefreshableVariables();
+        assert.equal(refreshable[0], "513");
+
+        nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 40;
+        refreshable = nibe.getRefreshableVariables();
+        assert.equal(refreshable[0], "513");
+
+        nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 5;
+        refreshable = nibe.getRefreshableVariables();
+        assert.equal(refreshable.length, 0);
+
+    });
+
     it("can listen for udp messages", async function() {
         let nibe = new NibeHandler();
 
@@ -60,7 +86,6 @@ describe("nibe/handler", () => {
                         console.log("resolving promise");
                         nibe.close();
                         resolve();
-
                 }
             });
 
