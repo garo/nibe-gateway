@@ -9,6 +9,10 @@ Prometheus.collectDefaultMetrics({timeout: 5000});
 
 const gateway_address = (process.env["GATEWAY_ADDRESS"] || "172.16.142.10");
 const gateway_port = Number((process.env["GATEWAY_PORT"] || 9999));
+const Log = require('debug-level')
+const log = Log.log('main')
+
+Log.options({level: 'DEBUG'});
 
 const nibe_register = new Prometheus.Gauge({
     name: 'nibe_register',
@@ -16,23 +20,23 @@ const nibe_register = new Prometheus.Gauge({
     labelNames: ['coilAddress', 'name']
   });
   
-console.log("Starting nibe-to-mqtt gateway");
+console.log("Starting nibe-gateway");
 
 const nibe = new NibeHandler();
 
 nibe.on('modbusUpdate', (modbusUpdate) => {
-    //console.log("Got modbusUpdate", modbusUpdate["coilAddress"], "value:", modbusUpdate["value"], modbusUpdate["name"]);
+    log.debug("Got modbusUpdate", modbusUpdate["coilAddress"], "value:", modbusUpdate["value"], modbusUpdate["name"]);
     nibe_register.labels(modbusUpdate["coilAddress"], modbusUpdate["name"]).set(modbusUpdate["scaled"]);
 });
 
 nibe.listen(gateway_port)
 .then(() => {
-    console.log("Listening for NibeGW udp packets on port", gateway_port);
+    log.log("Listening for NibeGW udp packets on port", gateway_port);
     if (gateway_address) {
-        console.log("Gateway address is set to", gateway_address+":"+gateway_port, "so read commands are allowed.");
+        log.log("Gateway address is set to", gateway_address+":"+gateway_port, "so read commands are allowed.");
         nibe.startRefreshing(gateway_address, gateway_port);
     } else {
-        console.log("Warning: GATEWAY_ADDRESS not set, read commands are not allowed");
+        log.log("Warning: GATEWAY_ADDRESS not set, read commands are not allowed");
     }
 });
 
@@ -66,6 +70,6 @@ app.get('/metrics', function(_, res) {
 app.get('/', function(req, res) {
     res.render('info', { 'variableInfo': nibe.variableInfo });
 });
-app.listen(port, () => console.log(`Listening for HTTP on port ${port}.`))
+app.listen(port, () => log.info(`Listening for HTTP on port ${port}.`))
   
   
