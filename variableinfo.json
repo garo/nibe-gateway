@@ -485,5 +485,7 @@
     "49364" : { "factor": 1, "datatype": "U8", "name": "Night Cooling Min. diff.", "type": "setting"},
     "49365" : { "factor": 1, "datatype": "U8", "name": "Night Cooling Min. diff.", "type": "setting"},
     "49366" : { "factor": 1, "datatype": "U8", "name": "Night Cooling Min. diff.", "type": "setting"},
-    "49431" : { "factor": 1, "datatype": "S16", "name": "Stop Temperature Supply Air Heating", "type": "setting"}
+    "49431" : { "factor": 1, "datatype": "S16", "name": "Stop Temperature Supply Air Heating", "type": "setting"},
+    "48852" : { "factor": 1, "datatype": "U8", "name": "Modbus40 Word Swap", "type": "setting"}
+
 }

@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  div.infoarea
+
+    table.table
+        thead
+            tr
+                th(cope="col") Address
+                th(cope="col") Name
+                th(cope="col") Value
+                th(cope="col") Data type
+                th(cope="col") Refresh rate
+                th(cope="col") Last updated
+        tbody
+            each info, coilAddress in variableInfo
+                if info.lastValue !== undefined
+                    tr
+                        th(scope="row")= coilAddress
+                        td= info.name
+                        td= info.lastScaledValue
+                        td= info.datatype
+                        td= info.refresh
+                        td= ((Date.now() - info.lastUpdate)/1000) + " seconds ago"
+
+            
