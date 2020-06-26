@@ -35,11 +35,18 @@ describe("nibe/handler", () => {
         nibe.on('modbusUpdate', (modbusUpdate) => {
             if (modbusUpdate.coilAddress == 513 &&
                 modbusUpdate.value == 100992003) {
-                    done();
-            }
-        })
+
+                    // Verify that the lastUpdate timestamp has been updated within last 2 seconds
+                    if (nibe.variableInfo["513"]["lastUpdate"] + 2000 > Date.now()) {
+                        done();
+                    } else {
+                        done(new Error("lastUpdate timestamp was not updated in test"));
+                    }
+                }
+            })
 
         nibe.handleMessage(data);
+        
     });
 
     it("should just drop invalid messages", function() {
@@ -63,11 +70,11 @@ describe("nibe/handler", () => {
         }
                     
         let refreshable = nibe.getRefreshableVariables();
-        assert.equal(refreshable[0], "513");
+        assert.equal(refreshable[0]["key"], "513");
 
         nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 40;
         refreshable = nibe.getRefreshableVariables();
-        assert.equal(refreshable[0], "513");
+        assert.equal(refreshable[0]["key"], "513");
 
         nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 5;
         refreshable = nibe.getRefreshableVariables();
