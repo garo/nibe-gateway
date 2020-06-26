@@ -25,8 +25,9 @@ nibe.on('modbusUpdate', (modbusUpdate) => {
     nibe_register.labels(modbusUpdate["coilAddress"], modbusUpdate["name"]).set(modbusUpdate["scaled"]);
 });
 
-nibe.listen(9999)
+nibe.listen(gateway_port)
 .then(() => {
+    console.log("Listening for NibeGW udp packets on port", gateway_port);
     if (gateway_address) {
         console.log("Gateway address is set to", gateway_address+":"+gateway_port, "so read commands are allowed.");
         nibe.startRefreshing(gateway_address, gateway_port);
@@ -46,7 +47,7 @@ set service nat rule 1 description 'nibe udp. kubessa namespace openhab, service
 set service nat rule 1 destination address 172.16.140.5
 set service nat rule 1 destination port 9998
 set service nat rule 1 inbound-interface eth2
-set service nat rule 1 inside-address address 172.16.196.104
+set service nat rule 1 inside-address address 10.102.90.109
 set service nat rule 1 inside-address port 9999
 set service nat rule 1 log enable
 set service nat rule 1 protocol tcp_udp
@@ -65,6 +66,6 @@ app.get('/metrics', function(_, res) {
 app.get('/', function(req, res) {
     res.render('info', { 'variableInfo': nibe.variableInfo });
 });
-app.listen(port, () => console.log(`nibe-gateway listening on port ${port}!`))
+app.listen(port, () => console.log(`Listening for HTTP on port ${port}.`))
   
   
