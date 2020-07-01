@@ -51,7 +51,7 @@ metadata:
   labels:
     k8s-app: nibe-gateway
   annotations:
-    gitlab: "https://gitlab.com/garokube/mqtt-to-prometheus"
+    gitlab: "https://gitlab.com/garokube/nibe-gateway"
 spec:
   ports:
     - name: http
