@@ -31,7 +31,7 @@ block content
                 |  to coil address 
                 span.coilAddress= lastWriteRequest.coilAddress
                 |  status is 
-                span= lastWriteRequest.status
+                span= lastWriteRequest.state
 
     div.write
         form.form-inline(action='/write', method='POST')
