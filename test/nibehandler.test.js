@@ -19,6 +19,7 @@ describe("nibe/handler", () => {
         nibe.on('modbusUpdate', (modbusUpdate) => {
             if (modbusUpdate.coilAddress == 40220 &&
                 modbusUpdate.value == 200) {
+                    nibe.close();
                     done();
             }
         })
@@ -32,14 +33,25 @@ describe("nibe/handler", () => {
         const data = Buffer.from("5C00206A060102030405064B", "hex");
 
         let nibe = new NibeHandler();
+        nibe.variableInfo = {
+            "513" : {
+                "factor": 10,
+                "type": "sensor",
+                "name": "Test signal 513",
+                "datatype": "S32",
+                "refresh": 30
+            }
+        };
         nibe.on('modbusUpdate', (modbusUpdate) => {
             if (modbusUpdate.coilAddress == 513 &&
                 modbusUpdate.value == 100992003) {
 
                     // Verify that the lastUpdate timestamp has been updated within last 2 seconds
                     if (nibe.variableInfo["513"]["lastUpdate"] + 2000 > Date.now()) {
+                        nibe.close();
                         done();
                     } else {
+                        nibe.close();
                         done(new Error("lastUpdate timestamp was not updated in test"));
                     }
                 }
@@ -54,11 +66,15 @@ describe("nibe/handler", () => {
 
         // This has invalid CRC
         nibe.handleMessage(Buffer.from("5C00206A060102030405064C", "hex"));
+        nibe.close();
     });
 
     it("will know which variables needs to be refreshed", () => {
         let nibe = new NibeHandler();
 
+        nibe.refreshList = {
+            "513" : 30
+        };
         nibe.variableInfo = {
             "513" : {
                 "factor": 10,
@@ -67,36 +83,47 @@ describe("nibe/handler", () => {
                 "datatype": "S32",
                 "refresh": 30
             }
-        }
+        };
                     
         let refreshable = nibe.getRefreshableVariables();
         assert.equal(refreshable[0]["key"], "513");
+        console.log(refreshable)
 
-        nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 40;
+        nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 40000;
         refreshable = nibe.getRefreshableVariables();
+        console.log(refreshable)
         assert.equal(refreshable[0]["key"], "513");
 
-        nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 5;
+        nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 5000;
         refreshable = nibe.getRefreshableVariables();
         assert.equal(refreshable.length, 0);
-
+        nibe.close();
     });
 
     it("can listen for udp messages", async function() {
         let nibe = new NibeHandler();
+        nibe.variableInfo = {
+            "513" : {
+                "factor": 10,
+                "type": "sensor",
+                "name": "Test signal 513",
+                "datatype": "S32",
+                "refresh": 30
+            }
+        };
+        let timeout = null;
 
         const p = new Promise((resolve, reject) => {
             nibe.on('modbusUpdate', (modbusUpdate) => {
                 console.log("Got modbusUpdate", modbusUpdate);
                 if (modbusUpdate.coilAddress == 513 &&
                     modbusUpdate.value == 100992003) {
-                        console.log("resolving promise");
                         nibe.close();
                         resolve();
                 }
             });
 
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 reject("Timeout while waiting for update");
             }, 500);
         });
@@ -113,7 +140,8 @@ describe("nibe/handler", () => {
                 return p;
             })
             .then(() => {
-                client.close();       
+                client.close();
+                clearTimeout(timeout);
             });
     });
 

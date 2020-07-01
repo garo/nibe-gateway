@@ -1,5 +1,6 @@
 
 {
+    "513"   : { "factor": 10, "type": "sensor", "name": "Test signal 513", "datatype": "S32" },
     "40004" : { "factor": 10, "datatype": "S16", "name": "BT1 Outdoor Temperature", "type": "sensor"},
     "40005" : { "factor": 10, "datatype": "S16", "name": "EP23-BT2 Supply temp S4", "type": "sensor"},
     "40006" : { "factor": 10, "datatype": "S16", "name": "EP22-BT2 Supply temp S3", "type": "sensor"},
