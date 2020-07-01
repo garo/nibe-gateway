@@ -7,22 +7,22 @@ block content
         thead
             tr
                 th(cope="col") Address
-                th(cope="col") Type
+                th.d-none.d-lg-table-cell(cope="col") Type
                 th(cope="col") Name
                 th(cope="col") Value
-                th(cope="col") Data type
-                th(cope="col") Refresh rate
+                th.d-none.d-lg-table-cell(cope="col") Data type
+                th.d-none.d-lg-table-cell(cope="col") Refresh rate
                 th(cope="col") Last updated
         tbody
             each info, coilAddress in variableInfo
                 if info.lastValue !== undefined
                     tr
                         th(scope="row")= coilAddress
-                        td= info.type
+                        td.d-none.d-lg-table-cell= info.type
                         td= info.name
                         td= info.lastScaledValue
-                        td= info.datatype
-                        td= info.refresh
+                        td.d-none.d-lg-table-cell= info.datatype
+                        td.d-none.d-lg-table-cell= info.refresh
                         td= ((Date.now() - info.lastUpdate)/1000) + " seconds ago"
 
     if lastWriteRequest !== undefined

@@ -14,3 +14,7 @@
 .lastWriteRequest .status {
     font-weight: bold;
 }
+
+#root .title {
+    font-weight: bold;
+}
