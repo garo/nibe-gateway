@@ -33,6 +33,8 @@ spec:
           env:
             - name: GATEWAY_ADDRESS
               value: "172.16.142.10"
+            - name: DEBUG_LEVEL
+              value: "DEBUG"
           ports:
             - name: http
               containerPort: 3000

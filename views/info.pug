@@ -7,6 +7,7 @@ block content
         thead
             tr
                 th(cope="col") Address
+                th(cope="col") Type
                 th(cope="col") Name
                 th(cope="col") Value
                 th(cope="col") Data type
@@ -17,6 +18,7 @@ block content
                 if info.lastValue !== undefined
                     tr
                         th(scope="row")= coilAddress
+                        td= info.type
                         td= info.name
                         td= info.lastScaledValue
                         td= info.datatype
