@@ -87,11 +87,9 @@ describe("nibe/handler", () => {
                     
         let refreshable = nibe.getRefreshableVariables();
         assert.equal(refreshable[0]["key"], "513");
-        console.log(refreshable)
 
         nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 40000;
         refreshable = nibe.getRefreshableVariables();
-        console.log(refreshable)
         assert.equal(refreshable[0]["key"], "513");
 
         nibe.variableInfo["513"]["lastUpdate"] = Date.now() - 5000;
@@ -115,7 +113,6 @@ describe("nibe/handler", () => {
 
         const p = new Promise((resolve, reject) => {
             nibe.on('modbusUpdate', (modbusUpdate) => {
-                console.log("Got modbusUpdate", modbusUpdate);
                 if (modbusUpdate.coilAddress == 513 &&
                     modbusUpdate.value == 100992003) {
                         nibe.close();
