@@ -1,1 +1,16 @@
 
+.write {
+    padding-left: 1em;
+}
+
+.lastWriteRequest .coilAddress {
+    font-weight: bold;
+}
+
+.lastWriteRequest .value {
+    font-weight: bold;
+}
+
+.lastWriteRequest .status {
+    font-weight: bold;
+}

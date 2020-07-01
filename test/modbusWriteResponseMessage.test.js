@@ -8,7 +8,6 @@ describe("nibe/modbusWriteResponseMessage", () => {
         assert.isOk(ModbusWriteResponseMessage);
     });
 
-
     it("can decode a CMD_MODBUS_WRITE_RESP successful message", () => {
         const data = Buffer.from("5C00206C01014C", "hex");
         const ok = ModbusWriteResponseMessage.decode(data);

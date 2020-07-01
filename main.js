@@ -61,6 +61,9 @@ set service nat rule 1 type destination
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded()); // to support URL-encoded bodies
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get('/metrics', function(_, res) {
@@ -68,7 +71,17 @@ app.get('/metrics', function(_, res) {
     res.send(Prometheus.register.metrics());
   });
 app.get('/', function(req, res) {
-    res.render('info', { 'variableInfo': nibe.variableInfo });
+    res.render('info', { 'variableInfo': nibe.variableInfo, 'lastWriteRequest': nibe.lastWriteRequest });
+});
+app.post('/write', function(req, res) {
+    const coilAddress = Number(req.body.coilAddress);
+    const value = Number(req.body.value);
+    if (coilAddress <= 0 || coilAddress > 65535) {
+        throw new Error("coilAddress out of range");
+    }
+
+    nibe.issueWriteRequest(coilAddress, value);
+    res.redirect(303, '/');
 });
 app.listen(port, () => log.info(`Listening for HTTP on port ${port}.`))
   

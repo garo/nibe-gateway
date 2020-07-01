@@ -23,4 +23,28 @@ block content
                         td= info.refresh
                         td= ((Date.now() - info.lastUpdate)/1000) + " seconds ago"
 
+    if lastWriteRequest !== undefined
+        div.lastWriteRequest
+            p
+                | Last write request: writing value 
+                span.value= lastWriteRequest.value
+                |  to coil address 
+                span.coilAddress= lastWriteRequest.coilAddress
+                |  status is 
+                span= lastWriteRequest.status
+
+    div.write
+        form.form-inline(action='/write', method='POST')
+            div.form-group.mb-2
+            label.sr-only(for='value') Value            
+            div.input-group.mb-2.mr-sm-2
+                div.input-group-prepend
+                    div.input-group-text Write value
+                input.form-control.mr-2.mr-sm-2(id='value',size="5",type='text', name='value', value='')
+            label.sr-only(for='coilAddress') Coil address
+            div.input-group.mb-2.mr-sm-2
+                div.input-group-prepend
+                    div.input-group-text to coil address
+                input.form-control(id='coilAddress',size="5", type='text', name='coilAddress', value='')
+            button.btn.btn-primary.mb-2(type='submit') Write
             
