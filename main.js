@@ -34,7 +34,7 @@ nibe.listen(gateway_port)
     log.log("Listening for NibeGW udp packets on port", gateway_port);
     if (gateway_address) {
         log.log("Gateway address is set to", gateway_address+":"+gateway_port, "so read commands are allowed.");
-        //nibe.startRefreshing(gateway_address, gateway_port);
+        nibe.startRefreshing(gateway_address, gateway_port);
     } else {
         log.log("Warning: GATEWAY_ADDRESS not set, read commands are not allowed");
     }
