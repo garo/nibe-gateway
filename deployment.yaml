@@ -35,6 +35,8 @@ spec:
               value: "172.16.142.10"
             - name: DEBUG_LEVEL
               value: "DEBUG"
+            - name: ENABLE_READ_COMMANDS
+              value: "true"
           ports:
             - name: http
               containerPort: 3000
