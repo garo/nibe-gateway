@@ -34,7 +34,12 @@ nibe.listen(gateway_port)
     log.log("Listening for NibeGW udp packets on port", gateway_port);
     if (gateway_address) {
         log.log("Gateway address is set to", gateway_address+":"+gateway_port, "so read commands are allowed.");
-        nibe.startRefreshing(gateway_address, gateway_port);
+        if (process.env['ENABLE_READ_COMMANDS']) {
+            nibe.startRefreshing(gateway_address, gateway_port);
+            console.log("ENABLE_READ_COMMANDS is set, so enabling read commands");
+        } else {
+            console.log("ENABLE_READ_COMMANDS is not set, so read commands are disabled");
+        }
     } else {
         log.log("Warning: GATEWAY_ADDRESS not set, read commands are not allowed");
     }
