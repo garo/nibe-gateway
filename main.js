@@ -71,9 +71,9 @@ app.use(express.urlencoded()); // to support URL-encoded bodies
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get('/metrics', function(_, res) {
+app.get('/metrics', async function(req, res) {
     res.type(Prometheus.register.contentType);
-    res.end(Prometheus.register.metrics());
+    res.end(await Prometheus.register.metrics());
 });
 
 app.get('/', function(req, res) {
