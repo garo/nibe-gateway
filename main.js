@@ -73,8 +73,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get('/metrics', function(_, res) {
     res.type(Prometheus.register.contentType);
-    res.send(Prometheus.register.metrics());
-  });
+    res.end(Prometheus.register.metrics());
+});
+
 app.get('/', function(req, res) {
     res.render('info', { 'variableInfo': nibe.variableInfo, 'lastWriteRequest': nibe.lastWriteRequest });
 });
